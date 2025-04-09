@@ -31,9 +31,7 @@ Nexum is designed for ease of use while providing access to powerful artificial 
 ## Installation
 
 ```python
-# Installation information will be added after package publication
-# Likely via pip:
-# pip install nexum
+pip install nexum
 ```
 
 ### Requirements
