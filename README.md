@@ -341,6 +341,7 @@ print(nexus.completion.create(messages, model_check=True, model=2, proxy=True))
 print(nexus.diffusion.create('cute anime cat', proxy=True))
 ```
 
+install_tor - работает лишь на виндоувс, автоматическая установка на макОс, линукс отсуствует но вы можете ее скачать с [официального сайта](https://archive.torproject.org/tor-package-archive/torbrowser) в ручную
 ## Расширенное использование
 
 ### Многоходовые разговоры
