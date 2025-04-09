@@ -1,193 +1,193 @@
-# Документация фреймворка Nexum
+# Nexum Framework Documentation
 
-## Содержание
+## Table of Contents
 
-1. [Введение](#введение)
-2. [Установка](#установка)
-3. [Начало работы](#начало-работы)
-4. [Клиент](#клиент)
-5. [API для генерации текста](#api-для-генерации-текста)
-   - [Доступные модели](#доступные-модели-текста)
-   - [Примеры использования](#примеры-использования-текста)
-6. [API для генерации изображений](#api-для-генерации-изображений)
-   - [Доступные модели](#доступные-модели-изображений)
-   - [Настройки генерации изображений](#настройки-генерации-изображений)
-   - [Примеры использования](#примеры-использования-изображений)
-7. [Интеграция с Tor](#интеграция-с-tor)
-8. [Расширенное использование](#расширенное-использование)
-9. [Устранение неполадок](#устранение-неполадок)
-10. [Справочник API](#справочник-api)
+1. [Introduction](#introduction)
+2. [Installation](#installation)
+3. [Getting Started](#getting-started)
+4. [Client](#client)
+5. [Text Generation API](#text-generation-api)
+   - [Available Models](#available-text-models)
+   - [Usage Examples](#text-usage-examples)
+6. [Image Generation API](#image-generation-api)
+   - [Available Models](#available-image-models)
+   - [Image Generation Settings](#image-generation-settings)
+   - [Usage Examples](#image-usage-examples)
+7. [Tor Integration](#tor-integration)
+8. [Advanced Usage](#advanced-usage)
+9. [Troubleshooting](#troubleshooting)
+10. [API Reference](#api-reference)
 
-## Введение
+## Introduction
 
-Nexum — это Python-фреймворк, предоставляющий доступ к множеству AI-сервисов через унифицированный API. Он включает:
+Nexum is a Python framework providing access to multiple AI services through a unified API. It includes:
 
-- **API для генерации текста**: Создание текста с использованием различных AI-моделей, включая Gemini, GPT-4, Llama и другие
-- **API для генерации изображений**: Создание изображений из текстовых промптов с использованием различных моделей диффузии
-- **Интеграция с Tor**: Опциональная поддержка прокси для повышенной приватности
+- **Text Generation API**: Create text using various AI models, including Gemini, GPT-4, Llama, and others
+- **Image Generation API**: Create images from text prompts using various diffusion models
+- **Tor Integration**: Optional proxy support for enhanced privacy
 
-Nexum разработан для простоты использования при обеспечении доступа к мощным возможностям искусственного интеллекта.
+Nexum is designed for ease of use while providing access to powerful artificial intelligence capabilities.
 
-## Установка
+## Installation
 
 ```python
-# Информация об установке будет добавлена после публикации пакета
-# Вероятно, через pip:
+# Installation information will be added after package publication
+# Likely via pip:
 # pip install nexum
 ```
 
-### Требования
+### Requirements
 
-- Python 3.9 или выше
-- Для интеграции с Tor: запущенный сервис Tor на вашей машине
+- Python 3.9 or higher
+- For Tor integration: running Tor service on your machine
 
-## Начало работы
+## Getting Started
 
-Начните с импорта класса Client и создания экземпляра клиента:
+Start by importing the Client class and creating a client instance:
 
 ```python
 from nexum import Client
 
-# Инициализация клиента
+# Initialize client
 client = Client()
 ```
 
-## Клиент
+## Client
 
-Класс `Client` является основной точкой входа для взаимодействия с API Nexum. Он предоставляет доступ к двум основным сервисам:
+The `Client` class is the main entry point for interacting with the Nexum API. It provides access to two main services:
 
-- `completion`: Для генерации текста
-- `diffusion`: Для генерации изображений
+- `completion`: For text generation
+- `diffusion`: For image generation
 
-### Базовое использование
+### Basic Usage
 
 ```python
 from nexum import Client
 
 client = Client()
 
-# Доступ к генерации текста
+# Access text generation
 completion = client.completion
 
-# Доступ к генерации изображений
+# Access image generation
 diffusion = client.diffusion
 ```
 
-## API для генерации текста
+## Text Generation API
 
-API для генерации текста позволяет создавать текстовые ответы с использованием различных AI-моделей.
+The text generation API allows you to create text responses using various AI models.
 
-### Создание текстовых ответов
+### Creating Text Responses
 
 ```python
 from nexum import Client
 
 client = Client()
 
-# Создание простого ответа
+# Create a simple response
 messages = [
-    {"role": "user", "content": "Привет!"}
+    {"role": "user", "content": "Hello!"}
 ]
 
-# Использование модели по умолчанию (Gemini-2.0-F-Thinking)
+# Using the default model (Gemini-2.0-F-Thinking)
 response = client.completion.create(messages)
 print(response)
 
-# Использование конкретной модели по ID
-response = client.completion.create(messages, model=4)  # Использует GPT-4o
+# Using a specific model by ID
+response = client.completion.create(messages, model=4)  # Uses GPT-4o
 print(response)
 
-# Использование конкретной модели по имени
+# Using a specific model by name
 response = client.completion.create(messages, model="Llama-3.3")
 print(response)
 
-# Проверка используемой модели
+# Check which model is being used
 response = client.completion.create(messages, model_check=True)
 print(response)
 
-# Использование Tor-прокси для повышенной приватности
+# Using Tor proxy for enhanced privacy
 response = client.completion.create(messages, proxy=True)
 print(response)
 ```
 
-### Доступные модели текста
+### Available Text Models
 
-Nexum предоставляет доступ к множеству моделей генерации текста от разных провайдеров:
+Nexum provides access to a variety of text generation models from different providers:
 
-#### Модели Google
-- **Gemini-2.0-F-Thinking** (ID: 1): Глубокое понимание контекста, генерация осмысленных ответов
-- **Gemini-2.0-Flash** (ID: 2): Высокоскоростная генерация текста с отличным пониманием контекста
-- **Gemini-1.5-Flash** (ID: 3): Быстрая и эффективная генерация текста с хорошим пониманием запросов пользователя
+#### Google Models
+- **Gemini-2.0-F-Thinking** (ID: 1): Deep context understanding, generating meaningful responses
+- **Gemini-2.0-Flash** (ID: 2): High-speed text generation with excellent context understanding
+- **Gemini-1.5-Flash** (ID: 3): Fast and efficient text generation with good understanding of user queries
 
-#### Модели OpenAI
-- **GPT-4o** (ID: 4): Мультимодальная модель, поддерживающая более 50 языков с улучшенным пониманием контекста
-- **O1-Mini** (ID: 5): Оптимизирована для задач STEM, особенно математики и программирования
+#### OpenAI Models
+- **GPT-4o** (ID: 4): Multimodal model supporting more than 50 languages with improved context understanding
+- **O1-Mini** (ID: 5): Optimized for STEM tasks, especially mathematics and programming
 
-#### Модели DeepSeek
-- **Deepseek-R1-Distill** (ID: 6): Компактные модели для задач рассуждения и программирования
+#### DeepSeek Models
+- **Deepseek-R1-Distill** (ID: 6): Compact models for reasoning and programming tasks
 
-#### Модели Meta
-- **Llama-3.3** (ID: 7): Продвинутая языковая модель с 70 миллиардами параметров
-- **Llama-3.1** (ID: 8): Крупная языковая модель с 405 миллиардами параметров и контекстом до 128k токенов
+#### Meta Models
+- **Llama-3.3** (ID: 7): Advanced language model with 70 billion parameters
+- **Llama-3.1** (ID: 8): Large language model with 405 billion parameters and context up to 128k tokens
 
-#### Модели Alibaba
-- **Qwen2.5** (ID: 9): Модель с 72,7 миллиардами параметров и контекстом до 128k токенов, улучшенная для кодирования и математики
+#### Alibaba Models
+- **Qwen2.5** (ID: 9): Model with 72.7 billion parameters and context up to 128k tokens, improved for coding and mathematics
 
-#### Модели xAI
-- **Grok-2** (ID: 11): Продвинутая языковая модель с возможностями генерации изображений
-- **Grok-Beta** (ID: 12): Экспериментальная модель с улучшенным рассуждением
+#### xAI Models
+- **Grok-2** (ID: 11): Advanced language model with image generation capabilities
+- **Grok-Beta** (ID: 12): Experimental model with improved reasoning
 
-#### Модели ToolBaz
-- **ToolBaz-v3.5-Pro** (ID: 13): Продвинутая модель генерации текста
-- **ToolBaz-v3** (ID: 14): Базовая модель генерации текста
+#### ToolBaz Models
+- **ToolBaz-v3.5-Pro** (ID: 13): Advanced text generation model
+- **ToolBaz-v3** (ID: 14): Basic text generation model
 
-#### Модели Mixtral
-- **Mixtral** (ID: 15): Мощная модель с 141 миллиардом параметров, использующая архитектуру Mixture-of-Experts
+#### Mixtral Models
+- **Mixtral** (ID: 15): Powerful model with 141 billion parameters using Mixture-of-Experts architecture
 
-#### Нефильтрованные модели
-- **L3-Euryale-v2.1** (ID: 16): Модель с 70 миллиардами параметров на основе архитектуры LLaMA-3
-- **Midnight-Rose** (ID: 17): Нефильтрованная языковая модель
-- **Unity** (ID: 18): Нефильтрованная языковая модель
-- **Unfiltered_X** (ID: 19): Нефильтрованная модель с 141 миллиардом параметров
+#### Unfiltered Models
+- **L3-Euryale-v2.1** (ID: 16): Model with 70 billion parameters based on LLaMA-3 architecture
+- **Midnight-Rose** (ID: 17): Unfiltered language model
+- **Unity** (ID: 18): Unfiltered language model
+- **Unfiltered_X** (ID: 19): Unfiltered model with 141 billion parameters
 
-### Примеры использования текста
+### Text Usage Examples
 
 ```python
 from nexum import Client
 from nexum.system.completions.utils.models import Models
 
-# Инициализация клиента
+# Initialize client
 client = Client()
 
-# Создание запроса с отображением используемой модели
-messages = [{'role': 'user', 'content': 'Привет!'}]
+# Create a request with model display
+messages = [{'role': 'user', 'content': 'Hello!'}]
 response = client.completion.create(messages, model_check=True, model=2)
 print(response)
 
-# Просмотр всех доступных моделей
+# View all available models
 all_models = Models().get_models()
 print(all_models)
 
-# Поиск модели по ID
+# Find model by ID
 model = Models().get_model_by_id(1)
 print(model)
 
-# Поиск модели по названию
+# Find model by name
 model = Models().get_model_by_name('Gemini-2.0-F-Thinking')
 print(model)
 
-# Универсальный поиск модели (по ID или названию)
-model = Models().get_model(1)  # По ID
+# Universal model search (by ID or name)
+model = Models().get_model(1)  # By ID
 print(model)
-model = Models().get_model('Gemini-2.0-F-Thinking')  # По названию
+model = Models().get_model('Gemini-2.0-F-Thinking')  # By name
 print(model)
 ```
 
-## API для генерации изображений
+## Image Generation API
 
-API для генерации изображений позволяет создавать изображения из текстовых промптов с использованием различных моделей диффузии.
+The image generation API allows you to create images from text prompts using various diffusion models.
 
-### Создание изображений
+### Creating Images
 
 ```python
 from nexum import Client
@@ -195,18 +195,18 @@ from nexum.system.diffusion.utils.settings import Settings
 
 client = Client()
 
-# Генерация изображения с настройками по умолчанию
+# Generate image with default settings
 prompt = "cute anime cat"
-client.diffusion.create(prompt)  # Сохраняет в ./media/image.jpg
+client.diffusion.create(prompt)  # Saves to ./media/image.jpg
 
-# Использование конкретной модели и путь сохранения
+# Using specific model and save path
 client.diffusion.create("beautiful mountain landscape", path="./output/landscape.jpg", model="flux-2")
 
-# Пользовательские настройки (только для модели sdxl-flash)
-settings = Settings(model=2)  # Инициализация настроек для sdxl-flash
-settings.set_resolution((768, 512))  # Установка пользовательского разрешения
-settings.set_steps(20)  # Установка количества шагов вывода
-settings.negative_prompt("blurry, low quality")  # Установка пользовательского негативного промпта
+# Custom settings (only for sdxl-flash model)
+settings = Settings(model=2)  # Initialize settings for sdxl-flash
+settings.set_resolution((768, 512))  # Set custom resolution
+settings.set_steps(20)  # Set the number of output steps
+settings.negative_prompt("blurry, low quality")  # Set custom negative prompt
 
 client.diffusion.create(
     "cute anime girl", 
@@ -215,69 +215,69 @@ client.diffusion.create(
     model=2
 )
 
-# Использование Tor-прокси
+# Using Tor proxy
 client.diffusion.create("cute anime cat", path="./output/proxy_cat.jpg", proxy=True)
 ```
 
-### Доступные модели изображений
+### Available Image Models
 
-Nexum в настоящее время поддерживает следующие модели генерации изображений:
+Nexum currently supports the following image generation models:
 
 1. **flux-2** (ID: 1)
-   - Стили: Реалистичный и Аниме
-   - NSFW-контент: Не поддерживается
-   - Настройки: Не настраиваемые
+   - Styles: Realistic and Anime
+   - NSFW content: Not supported
+   - Settings: Not customizable
 
 2. **sdxl-flash** (ID: 2)
-   - Стили: Реалистичный и Аниме
-   - NSFW-контент: Поддерживается
-   - Настройки: Полностью настраиваемые
+   - Styles: Realistic and Anime
+   - NSFW content: Supported
+   - Settings: Fully customizable
 
-### Настройки генерации изображений
+### Image Generation Settings
 
-Для моделей, поддерживающих пользовательские настройки (в настоящее время только sdxl-flash), вы можете настроить следующие параметры:
+For models that support custom settings (currently only sdxl-flash), you can configure the following parameters:
 
 ```python
 from nexum.system.diffusion.utils.settings import Settings
 
-settings = Settings(model=2)  # Инициализация настроек для sdxl-flash
+settings = Settings(model=2)  # Initialize settings for sdxl-flash
 
-# Установка пользовательского негативного промпта
+# Set custom negative prompt
 settings.negative_prompt("low quality, blurry, distorted")
 
-# Установка определенного сида для воспроизводимых результатов (или 'random' для случайного сида)
-settings.set_seed(42)  # Или settings.set_seed('random')
+# Set specific seed for reproducible results (or 'random' for random seed)
+settings.set_seed(42)  # Or settings.set_seed('random')
 
-# Установка пользовательского разрешения (высота, ширина)
+# Set custom resolution (height, width)
 settings.set_resolution((768, 512))  
 
-# Установка количества шагов вывода (больше = больше деталей, но медленнее)
+# Set the number of output steps (more = more details but slower)
 settings.set_steps(20)
 ```
 
-Настройки по умолчанию для sdxl-flash:
-- Негативный промпт: `(deformed, distorted, disfigured:1.3), poorly drawn, bad anatomy, wrong anatomy, extra limb, missing limb, floating limbs, (mutated hands and fingers:1.4), disconnected limbs, mutation, mutated, ugly, disgusting, blurry, amputation`
-- Сид: случайный
-- Разрешение: 1024x1024
-- Шаги: 15
+Default settings for sdxl-flash:
+- Negative prompt: `(deformed, distorted, disfigured:1.3), poorly drawn, bad anatomy, wrong anatomy, extra limb, missing limb, floating limbs, (mutated hands and fingers:1.4), disconnected limbs, mutation, mutated, ugly, disgusting, blurry, amputation`
+- Seed: random
+- Resolution: 1024x1024
+- Steps: 15
 
-### Примеры использования изображений
+### Image Usage Examples
 
 ```python
 from nexum import Client
 from nexum.system.diffusion.utils.models import Models
 from nexum.system.diffusion.utils.settings import Settings
 
-# Инициализация клиента
+# Initialize client
 client = Client()
 
-# Базовая генерация изображения
-client.diffusion.create('cute anime cat')  # Сохраняет в ./media/image.jpg
+# Basic image generation
+client.diffusion.create('cute anime cat')  # Saves to ./media/image.jpg
 
-# Генерация с использованием конкретной модели и путем сохранения
+# Generation using specific model and save path
 client.diffusion.create('cute anime girl', path='./media/girl.png', model=2)
 
-# Генерация с пользовательскими настройками
+# Generation with custom settings
 settings = Settings(model=2)
 settings.negative_prompt('(deformed, distorted, disfigured:1.3), poorly drawn, bad anatomy...')
 settings.set_seed('random')
@@ -290,61 +290,62 @@ client.diffusion.create(
     settings=settings
 )
 
-# Просмотр всех доступных моделей для генерации изображений
+# View all available image generation models
 diffusion_models = Models().get_models()
 print(diffusion_models)
 
-# Поиск модели по ID или названию
-model = Models().get_model(1)  # По ID
+# Find model by ID or name
+model = Models().get_model(1)  # By ID
 print(model)
-model = Models().get_model('flux-2')  # По названию
+model = Models().get_model('flux-2')  # By name
 print(model)
 ```
 
-## Интеграция с Tor
+## Tor Integration
 
-Nexum предоставляет опциональную интеграцию с Tor-прокси для повышенной приватности. Эта функция требует запущенного сервиса Tor на вашей машине.
+Nexum provides optional Tor proxy integration for enhanced privacy. This feature requires a running Tor service on your machine.
 
-### Использование Tor-прокси
+### Using Tor Proxy
 
-Добавьте параметр `proxy=True` к любому вызову API:
+Add the `proxy=True` parameter to any API call:
 
 ```python
-# Генерация текста с Tor-прокси
+# Generate text with Tor proxy
 response = client.completion.create(messages, proxy=True)
 
-# Генерация изображения с Tor-прокси
+# Generate image with Tor proxy
 client.diffusion.create(prompt, path="./output/image.jpg", proxy=True)
 ```
 
-### Утилиты Tor
+### Tor Utilities
 
 ```python
 from nexum.utils.webtor import Interfice_Tor
 
-# Установка Tor, если не установлен
+# Install Tor if not installed
 # Interfice_Tor.install_tor()
 
-# Получение нового IP-адреса Tor
+# Get a new Tor IP address
 Interfice_Tor.new_ip()
 
-# Проверка вашего текущего IP-адреса Tor
+# Check your current Tor IP address
 current_ip = Interfice_Tor.check_ip()
 print(current_ip)
 
-# Полный пример с использованием Tor
+# Complete example using Tor
 Interfice_Tor.new_ip()
 nexus = Client()
 
-messages = [{'role': 'user', 'content': 'Привет!'}]
+messages = [{'role': 'user', 'content': 'Hello!'}]
 print(nexus.completion.create(messages, model_check=True, model=2, proxy=True))
 print(nexus.diffusion.create('cute anime cat', proxy=True))
 ```
 
-install_tor - работает лишь на виндоувс, автоматическая установка на макОс, линукс отсуствует но вы можете ее скачать с [официального сайта](https://archive.torproject.org/tor-package-archive/torbrowser) в ручную
-## Расширенное использование
+install_tor - works only on Windows, automatic installation on macOS and Linux is not available, but you can download it manually from the [official website](https://archive.torproject.org/tor-package-archive/torbrowser).
 
-### Многоходовые разговоры
+## Advanced Usage
+
+### Multi-Turn Conversations
 
 ```python
 from nexum import Client
@@ -352,23 +353,23 @@ from nexum import Client
 client = Client()
 
 messages = [
-    {"role": "user", "content": "Привет, можешь помочь мне с задачей по Python?"},
-    {"role": "ai", "content": "Конечно! Буду рад помочь с вашей задачей по Python. Над чем вы работаете?"},
-    {"role": "user", "content": "Как отсортировать словарь по значению в Python?"}
+    {"role": "user", "content": "Hi, can you help me with a Python task?"},
+    {"role": "ai", "content": "Of course! I'd be happy to help with your Python task. What are you working on?"},
+    {"role": "user", "content": "How do I sort a dictionary by value in Python?"}
 ]
 
 response = client.completion.create(messages)
 print(response)
 
-# Добавление ответа для продолжения разговора
+# Add the response to continue the conversation
 messages.append({"role": "ai", "content": response})
-messages.append({"role": "user", "content": "Можешь показать еще один пример?"})
+messages.append({"role": "user", "content": "Can you show me another example?"})
 
 response = client.completion.create(messages)
 print(response)
 ```
 
-### Проверка доступных моделей
+### Checking Available Models
 
 ```python
 from nexum.system.completions.utils.models import Models
@@ -376,39 +377,39 @@ from nexum.system.completions.utils.models import Models
 models = Models()
 all_models = models.get_models()
 
-# Вывод всех доступных моделей
+# Output all available models
 for provider, provider_models in all_models.items():
-    print(f"\nМодели {provider}:")
+    print(f"\n{provider} Models:")
     for model in provider_models:
         print(f"  - {model['model_name']} (ID: {model['model_id']})")
         if model['description']:
-            print(f"    Описание: {model['description']}")
+            print(f"    Description: {model['description']}")
 ```
 
-## Устранение неполадок
+## Troubleshooting
 
-### Распространенные проблемы
+### Common Issues
 
-1. **Ошибки подключения**
-   - Убедитесь, что ваше интернет-соединение стабильно
-   - При использовании Tor проверьте, что сервис Tor запущен на вашей машине
+1. **Connection Errors**
+   - Ensure your internet connection is stable
+   - When using Tor, check that the Tor service is running on your machine
 
-2. **Модель не найдена**
-   - Перепроверьте ID или название модели
-   - Используйте класс `Models` для получения списка доступных моделей
+2. **Model Not Found**
+   - Double-check the model ID or name
+   - Use the `Models` class to get a list of available models
 
-3. **Сбой при генерации изображения**
-   - Убедитесь, что директория для сохранения изображений существует или используйте `os.makedirs()` для её создания
-   - Попробуйте другую модель или более простой промпт
+3. **Image Generation Failure**
+   - Ensure the directory for saving images exists or use `os.makedirs()` to create it
+   - Try a different model or a simpler prompt
 
-### Получение помощи
+### Getting Help
 
-Если вы столкнулись с проблемами, не описанными в этой документации, пожалуйста:
-- Проверьте обновленную документацию
-- Поищите похожие проблемы в репозитории проекта
-- Отправьте подробный отчет о баге с вашим кодом и сообщениями об ошибках
+If you encounter issues not described in this documentation, please:
+- Check the updated documentation
+- Look for similar issues in the project repository
+- Submit a detailed bug report with your code and error messages
 
-## Справочник API
+## API Reference
 
 ### Client
 
@@ -416,9 +417,9 @@ for provider, provider_models in all_models.items():
 Client()
 ```
 
-**Свойства:**
-- `completion`: Доступ к API для генерации текста
-- `diffusion`: Доступ к API для генерации изображений
+**Properties:**
+- `completion`: Access to the text generation API
+- `diffusion`: Access to the image generation API
 
 ### Completion
 
@@ -426,14 +427,14 @@ Client()
 client.completion.create(messages, model=1, model_check=False, proxy=False)
 ```
 
-**Параметры:**
-- `messages`: Список словарей сообщений с ключами 'role' и 'content'
-- `model`: ID модели (int) или название (str), по умолчанию 1 (Gemini-2.0-F-Thinking)
-- `model_check`: Включать ли информацию о модели в ответ, по умолчанию False
-- `proxy`: Использовать ли Tor-прокси, по умолчанию False
+**Parameters:**
+- `messages`: List of message dictionaries with 'role' and 'content' keys
+- `model`: Model ID (int) or name (str), default 1 (Gemini-2.0-F-Thinking)
+- `model_check`: Whether to include model information in the response, default False
+- `proxy`: Whether to use Tor proxy, default False
 
-**Возвращает:**
-- Сгенерированный текстовый ответ в виде строки
+**Returns:**
+- Generated text response as a string
 
 ### Diffusion
 
@@ -441,15 +442,15 @@ client.completion.create(messages, model=1, model_check=False, proxy=False)
 client.diffusion.create(prompt, path='./media/image.jpg', settings=None, model=1, proxy=False)
 ```
 
-**Параметры:**
-- `prompt`: Текстовый промпт для генерации изображения
-- `path`: Путь выходного файла, по умолчанию './media/image.jpg'
-- `settings`: Опциональный объект Settings для настраиваемых моделей
-- `model`: ID модели (int) или название (str), по умолчанию 1 (flux-2)
-- `proxy`: Использовать ли Tor-прокси, по умолчанию False
+**Parameters:**
+- `prompt`: Text prompt for image generation
+- `path`: Output file path, default './media/image.jpg'
+- `settings`: Optional Settings object for customizable models
+- `model`: Model ID (int) or name (str), default 1 (flux-2)
+- `proxy`: Whether to use Tor proxy, default False
 
-**Возвращает:**
-- Булево значение, указывающее на успех или неудачу
+**Returns:**
+- Boolean indicating success or failure
 
 ### Settings
 
@@ -457,11 +458,11 @@ client.diffusion.create(prompt, path='./media/image.jpg', settings=None, model=1
 Settings(model=2)
 ```
 
-**Методы:**
-- `negative_prompt(prompt)`: Установка негативного промпта
-- `set_seed(seed)`: Установка сида генератора (int или 'random')
-- `set_resolution(res=(height, width))`: Установка выходного разрешения
-- `set_steps(steps)`: Установка шагов вывода
+**Methods:**
+- `negative_prompt(prompt)`: Set negative prompt
+- `set_seed(seed)`: Set generator seed (int or 'random')
+- `set_resolution(res=(height, width))`: Set output resolution
+- `set_steps(steps)`: Set output steps
 
-**Свойство:**
-- `setting`: Получение текущего словаря настроек
+**Property:**
+- `setting`: Get current settings dictionary
