@@ -32,28 +32,29 @@ class Tor:
 		if not os.path.exists(path) or repair:
 			os.makedirs(path, exist_ok=True)
 
-			print('[*] Скачиваем архив TOR...')
+			print('[*] Downloading TOR archive...')
 			resp = requests.get(archive_url)
 			with open(archive_path, 'wb') as file:
 				file.write(resp.content)
 
-			print('[*] Распаковываем архив...')
+			print('[*] Extracting archive...')
 			with tarfile.open(archive_path, 'r:gz') as tar:
 				tar.extractall(path=path)
 
 			os.remove(archive_path)
 
-			print('[*] Создаём конфигурацию torrc...')
+			print('[*] Creating torrc configuration...')
 			with open(torrc_path, 'w', encoding='utf-8') as torrc:
 				torrc.write('SocksPort 9050\nControlPort 9051')
 
 		if os.path.exists(tor_exe_path):
-			print('[*] Запускаем Tor...')
-			# Двойные кавычки для корректной работы start/cmd
+			print('[*] Launching Tor...')
+			# Double quotes are used to ensure correct behavior with start/cmd
 			cmd = f'start cmd /k ""{tor_exe_path}" -f "{torrc_path}""'
 			subprocess.Popen(cmd, shell=True)
 		else:
-			print('[!] Не удалось найти tor.exe после установки.')
+			print('[!] Failed to find tor.exe after installation.')
+
 
 
 	@property
